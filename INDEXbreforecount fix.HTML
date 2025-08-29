@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Cost ROI Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .fmh-unique-container-wrapper {
+            background-color: #FFFDF8;
+            color: #574732;
+            line-height: 1.6;
+        }
+
+        .fmh-unique-container-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .fmh-unique-header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .fmh-unique-header-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #574732;
+        }
+
+        .fmh-unique-header-section p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .fmh-unique-calculator-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .fmh-unique-input-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .fmh-unique-instructions-section {
+            flex: 1;
+            min-width: 300px;
+            background: #fffdf8;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .fmh-unique-why-fmh-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .fmh-unique-results-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .fmh-unique-section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #574732;
+            border-bottom: 2px solid #FFC35D;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fmh-unique-section-title i {
+            color: #FFC35D;
+        }
+
+        .fmh-unique-form-group {
+            margin-bottom: 20px;
+        }
+
+        .fmh-unique-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #574732;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fmh-unique-form-group label i {
+            color: #FFC35D;
+        }
+
+        .fmh-unique-form-group input, .fmh-unique-form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #574732;
+            transition: border-color 0.3s;
+        }
+
+        .fmh-unique-form-group input:focus, .fmh-unique-form-group select:focus {
+            outline: none;
+            border-color: #FFC35D;
+        }
+
+        .fmh-unique-form-group input.fmh-unique-error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        .fmh-unique-error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .fmh-unique-error-message.show {
+            display: block;
+        }
+
+        .fmh-unique-calculate-btn {
+            width: 100%;
+            background: #FFC35D;
+            color: #574732;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .fmh-unique-calculate-btn:hover {
+            background: #e6b04a;
+        }
+
+        .fmh-unique-result-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FFC35D;
+        }
+
+        .fmh-unique-result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fmh-unique-result-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .fmh-unique-result-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fmh-unique-result-label i {
+            color: #FFC35D;
+            font-size: 0.9rem;
+        }
+
+        .fmh-unique-result-value {
+            font-weight: 600;
+            color: #574732;
+        }
+
+        /* Isolated Modal Styles */
+        .fmh-unique-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fmh-unique-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px;
+            position: relative;
+            z-index: 1000000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+
+        .fmh-unique-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .fmh-unique-modal-title {
+            color: #574732;
+            font-size: 3.5rem;
+            margin: 0 0 10px 0;
+            display: block;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .fmh-unique-modal-subtitle {
+            color: #574732;
+            font-size: 1.3rem;
+            margin: 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .fmh-unique-modal-title i {
+            color: #FFC35D;
+            margin-right: 10px;
+        }
+
+        .fmh-unique-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .fmh-unique-modal-close:hover {
+            background: #f0f0f0;
+            color: #574732;
+        }
+
+        .fmh-unique-modal-body {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .fmh-unique-modal-body p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .fmh-unique-savings-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #574732;
+            margin: 25px 0;
+            display: block;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .fmh-unique-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .fmh-unique-close-modal {
+            background: #FFC35D;
+            color: #574732;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .fmh-unique-close-modal:hover {
+            background: #e6b04a;
+        }
+
+        .fmh-unique-contact-btn {
+            background: #574732;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            min-width: 200px;
+            text-decoration: none;
+        }
+
+        .fmh-unique-contact-btn:hover {
+            background: #3d3222;
+        }
+
+        .fmh-unique-benefit-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff8e6;
+            border-left: 3px solid #FFC35D;
+            display: flex;
+            gap: 15px;
+        }
+
+        .fmh-unique-benefit-icon {
+            color: #FFC35D;
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        .fmh-unique-benefit-content {
+            flex: 1;
+        }
+
+        .fmh-unique-benefit-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #574732;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fmh-unique-benefit-desc {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .fmh-unique-stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .fmh-unique-stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: #fff8e6;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .fmh-unique-stat-icon {
+            color: #FFC35D;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .fmh-unique-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #574732;
+        }
+
+        .fmh-unique-stat-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .fmh-unique-key-points {
+            margin-top: 20px;
+        }
+
+        .fmh-unique-key-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .fmh-unique-key-point:hover {
+            background: #fff8e6;
+        }
+
+        .fmh-unique-key-point-icon {
+            color: #FFC35D;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .fmh-unique-key-point-text {
+            flex: 1;
+        }
+
+        .fmh-unique-restaurant-name {
+            color: #FFC35D;
+            font-weight: 600;
+        }
+
+        .fmh-unique-user-name {
+            color: #574732;
+            font-weight: 600;
+        }
+
+        .fmh-unique-instruction-step {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff8e6;
+            border-left: 3px solid #FFC35D;
+        }
+
+        .fmh-unique-step-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: #FFC35D;
+            color: #574732;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .fmh-unique-step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #574732;
+        }
+
+        .fmh-unique-step-desc {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .fmh-unique-post-calculation-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .fmh-unique-post-calculation-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .fmh-unique-bottom-sections {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .fmh-unique-bottom-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Savings Comparison Styles */
+        .fmh-unique-savings-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .fmh-unique-comparison-section {
+            flex: 1;
+            min-width: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #FFC35D;
+        }
+
+        .fmh-unique-comparison-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #574732;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1e5e9;
+            text-align: center;
+        }
+
+        .fmh-unique-comparison-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fmh-unique-comparison-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .fmh-unique-comparison-label {
+            font-weight: 500;
+            color: #574732;
+        }
+
+        .fmh-unique-comparison-value {
+            font-weight: 600;
+            color: #574732;
+        }
+
+        .fmh-unique-total-saving {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fff8e6;
+            border-radius: 10px;
+            border-left: 4px solid #FFC35D;
+        }
+
+        .fmh-unique-total-saving-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #574732;
+            margin-bottom: 10px;
+        }
+
+        .fmh-unique-total-saving-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #574732;
+        }
+
+        .fmh-unique-revenue-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #574732;
+            margin-top: 15px;
+        }
+
+        .fmh-unique-revenue-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #574732;
+        }
+
+        @media (max-width: 768px) {
+            .fmh-unique-calculator-container {
+                flex-direction: column;
+            }
+            
+            .fmh-unique-header-section h1 {
+                font-size: 2rem;
+            }
+            
+            .fmh-unique-modal-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .fmh-unique-post-calculation-layout {
+                flex-direction: column;
+            }
+            
+            .fmh-unique-bottom-sections {
+                flex-direction: column;
+            }
+            
+            .fmh-unique-modal-content {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .fmh-unique-modal-title {
+                font-size: 2.8rem;
+            }
+            
+            .fmh-unique-modal-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .fmh-unique-modal-body p {
+                font-size: 1rem;
+            }
+            
+            .fmh-unique-savings-amount {
+                font-size: 2rem;
+            }
+            
+            .fmh-unique-benefit-item {
+                flex-direction: column;
+            }
+            
+            .fmh-unique-close-modal, .fmh-unique-contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .fmh-unique-savings-comparison {
+                flex-direction: column;
+            }
+            
+            .fmh-unique-comparison-section {
+                width: 100%;
+            }
+            
+            .fmh-unique-total-saving-value {
+                font-size: 1.8rem;
+            }
+            
+            .fmh-unique-revenue-value {
+                font-size: 1.5rem;
+            }
+            
+            /* Mobile-specific adjustments for modal title */
+            .fmh-unique-modal-title {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fmh-unique-container-wrapper">
+        <div class="fmh-unique-container-main">
+            <div class="fmh-unique-header-section">
+                <h1><i class="fas fa-calculator"></i> Food Cost ROI Calculator</h1>
+                <p>Discover how FMH can transform your restaurant's profitability</p>
+            </div>
+
+            <div class="fmh-unique-calculator-container">
+                <div class="fmh-unique-input-section">
+                    <h2 class="fmh-unique-section-title"><i class="fas fa-utensils"></i> Restaurant Information</h2>
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-restaurant-name"><i class="fas fa-store"></i> Restaurant Name</label>
+                        <input type="text" id="fmh-unique-restaurant-name" placeholder="Enter restaurant name">
+                        <div class="fmh-unique-error-message" id="fmh-unique-restaurant-name-error">Restaurant name is required</div>
+                    </div>
+                    
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-your-name"><i class="fas fa-user"></i> Your Name</label>
+                        <input type="text" id="fmh-unique-your-name" placeholder="Enter your name">
+                        <div class="fmh-unique-error-message" id="fmh-unique-your-name-error">Your name is required</div>
+                    </div>
+                    
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-outlets"><i class="fas fa-building"></i> Number of Outlets</label>
+                        <input type="number" id="fmh-unique-outlets" placeholder="Enter number of outlets" min="1" value="1">
+                    </div>
+                    
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-monthly-sales"><i class="fas fa-dollar-sign"></i> Avg. Monthly Sales per Outlet ($)</label>
+                        <input type="number" id="fmh-unique-monthly-sales" placeholder="Enter average monthly sales" min="0" step="0.01">
+                        <div class="fmh-unique-error-message" id="fmh-unique-monthly-sales-error">Monthly sales must be a positive number</div>
+                    </div>
+                    
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-cogs"><i class="fas fa-chart-pie"></i> COGS % (Global Standard 40%)</label>
+                        <input type="number" id="fmh-unique-cogs" placeholder="Enter COGS percentage" min="0" max="100" step="0.1" value="40">
+                        <div class="fmh-unique-error-message" id="fmh-unique-cogs-error">COGS percentage must be between 0 and 100</div>
+                    </div>
+                    
+                    <div class="fmh-unique-form-group">
+                        <label for="fmh-unique-wastage"><i class="fas fa-trash"></i> Food Wastage % (as % of COGS, Global Standard 17%)</label>
+                        <input type="number" id="fmh-unique-wastage" placeholder="Enter food wastage percentage" min="0" max="100" step="0.1" value="17">
+                        <div class="fmh-unique-error-message" id="fmh-unique-wastage-error">Wastage percentage must be between 0 and 100</div>
+                    </div>
+                    
+                    <button class="fmh-unique-calculate-btn" onclick="fmhUniqueCalculateROI()">
+                        <i class="fas fa-calculator"></i> Calculate Savings
+                    </button>
+                </div>
+                
+                <div class="fmh-unique-instructions-section" id="fmh-unique-instructions-section">
+                    <h2 class="fmh-unique-section-title"><i class="fas fa-info-circle"></i> How to Use This Calculator</h2>
+                    
+                    <div class="fmh-unique-instruction-step">
+                        <div class="fmh-unique-step-title"><span class="fmh-unique-step-number">1</span> Enter Restaurant Details</div>
+                        <div class="fmh-unique-step-desc">Provide your restaurant name, your name, number of outlets, and average monthly sales per outlet.</div>
+                    </div>
+                    
+                    <div class="fmh-unique-instruction-step">
+                        <div class="fmh-unique-step-title"><span class="fmh-unique-step-number">2</span> Review Default Values</div>
+                        <div class="fmh-unique-step-desc">COGS is typically 40% and food wastage is typically 17% of COGS. Adjust if you have different figures.</div>
+                    </div>
+                    
+                    <div class="fmh-unique-instruction-step">
+                        <div class="fmh-unique-step-title"><span class="fmh-unique-step-number">3</span> Click Calculate Savings</div>
+                        <div class="fmh-unique-step-desc">Our calculator will show you the potential savings FMH can bring to your business.</div>
+                    </div>
+                    
+                    <div class="fmh-unique-instruction-step">
+                        <div class="fmh-unique-step-title"><span class="fmh-unique-step-number">4</span> Analyze Results</div>
+                        <div class="fmh-unique-step-desc">Review the detailed breakdown of potential savings and efficiency improvements.</div>
+                    </div>
+                    
+                    <div class="fmh-unique-instruction-step">
+                        <div class="fmh-unique-step-title"><span class="fmh-unique-step-number">5</span> Take Action</div>
+                        <div class="fmh-unique-step-desc">Use these projections to start transforming your restaurant's financial performance today.</div>
+                    </div>
+                </div>
+                
+                <div class="fmh-unique-results-section" id="fmh-unique-results-section">
+                    <h2 class="fmh-unique-section-title"><i class="fas fa-chart-bar"></i> Your Savings Potential</h2>
+                    <div id="fmh-unique-results-container">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fmh-unique-post-calculation-layout" id="fmh-unique-post-calculation-layout" style="display: none;">
+                <div class="fmh-unique-post-calculation-section">
+                    <div class="fmh-unique-why-fmh-section" id="fmh-unique-why-fmh-section">
+                        <h2 class="fmh-unique-section-title"><i class="fas fa-lightbulb"></i> Why Choose FMH?</h2>
+                        
+                        <div class="fmh-unique-stats-container">
+                            <div class="fmh-unique-stat-card">
+                                <div class="fmh-unique-stat-icon">
+                                    <i class="fas fa-recycle"></i>
+                                </div>
+                                <div class="fmh-unique-stat-value">24%</div>
+                                <div class="fmh-unique-stat-label">Wastage Reduction</div>
+                            </div>
+                            <div class="fmh-unique-stat-card">
+                                <div class="fmh-unique-stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="fmh-unique-stat-value">10%</div>
+                                <div class="fmh-unique-stat-label">COGS Reduction</div>
+                            </div>
+                            <div class="fmh-unique-stat-card">
+                                <div class="fmh-unique-stat-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="fmh-unique-stat-value">40%</div>
+                                <div class="fmh-unique-stat-label">Average ROI</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fmh-unique-benefit-item">
+                            <div class="fmh-unique-benefit-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="fmh-unique-benefit-content">
+                                <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-down"></i> Reduce Food Waste</div>
+                                <div class="fmh-unique-benefit-desc">FMH's intelligent inventory management reduces food waste by up to 24% through precise tracking and smart ordering.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fmh-unique-benefit-item">
+                            <div class="fmh-unique-benefit-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <div class="fmh-unique-benefit-content">
+                                <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-down"></i> Lower Food Costs</div>
+                                <div class="fmh-unique-benefit-desc">Optimize your purchasing and reduce COGS by up to 10% with our data-driven supplier recommendations.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fmh-unique-benefit-item">
+                            <div class="fmh-unique-benefit-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="fmh-unique-benefit-content">
+                                <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-up"></i> Increase Profit Margins</div>
+                                <div class="fmh-unique-benefit-desc">Transform your food cost savings directly into bottom-line profits with our proven methodologies.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fmh-unique-key-points">
+                            <div class="fmh-unique-key-point">
+                                <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                                <div class="fmh-unique-key-point-text">Real-time inventory tracking</div>
+                            </div>
+                            <div class="fmh-unique-key-point">
+                                <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                                <div class="fmh-unique-key-point-text">Automated purchase orders</div>
+                            </div>
+                            <div class="fmh-unique-key-point">
+                                <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                                <div class="fmh-unique-key-point-text">Recipe cost optimization</div>
+                            </div>
+                            <div class="fmh-unique-key-point">
+                                <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                                <div class="fmh-unique-key-point-text">Supplier price comparison</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fmh-unique-bottom-sections" id="fmh-unique-bottom-sections" style="display: none;">
+                <div class="fmh-unique-bottom-section">
+                    <h2 class="fmh-unique-section-title"><i class="fas fa-lightbulb"></i> Why Choose FMH?</h2>
+                    
+                    <div class="fmh-unique-stats-container">
+                        <div class="fmh-unique-stat-card">
+                            <div class="fmh-unique-stat-icon">
+                                <i class="fas fa-recycle"></i>
+                            </div>
+                            <div class="fmh-unique-stat-value">24%</div>
+                            <div class="fmh-unique-stat-label">Wastage Reduction</div>
+                        </div>
+                        <div class="fmh-unique-stat-card">
+                            <div class="fmh-unique-stat-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="fmh-unique-stat-value">10%</div>
+                            <div class="fmh-unique-stat-label">COGS Reduction</div>
+                        </div>
+                        <div class="fmh-unique-stat-card">
+                            <div class="fmh-unique-stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="fmh-unique-stat-value">40%</div>
+                            <div class="fmh-unique-stat-label">Average ROI</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fmh-unique-benefit-item">
+                        <div class="fmh-unique-benefit-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="fmh-unique-benefit-content">
+                            <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-down"></i> Reduce Food Waste</div>
+                            <div class="fmh-unique-benefit-desc">FMH's intelligent inventory management reduces food waste by up to 24% through precise tracking and smart ordering.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fmh-unique-benefit-item">
+                        <div class="fmh-unique-benefit-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="fmh-unique-benefit-content">
+                            <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-down"></i> Lower Food Costs</div>
+                            <div class="fmh-unique-benefit-desc">Optimize your purchasing and reduce COGS by up to 10% with our data-driven supplier recommendations.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fmh-unique-benefit-item">
+                        <div class="fmh-unique-benefit-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="fmh-unique-benefit-content">
+                            <div class="fmh-unique-benefit-title"><i class="fas fa-arrow-up"></i> Increase Profit Margins</div>
+                            <div class="fmh-unique-benefit-desc">Transform your food cost savings directly into bottom-line profits with our proven methodologies.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fmh-unique-key-points">
+                        <div class="fmh-unique-key-point">
+                            <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="fmh-unique-key-point-text">Real-time inventory tracking</div>
+                        </div>
+                        <div class="fmh-unique-key-point">
+                            <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="fmh-unique-key-point-text">Automated purchase orders</div>
+                        </div>
+                        <div class="fmh-unique-key-point">
+                            <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="fmh-unique-key-point-text">Recipe cost optimization</div>
+                        </div>
+                        <div class="fmh-unique-key-point">
+                            <div class="fmh-unique-key-point-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="fmh-unique-key-point-text">Supplier price comparison</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Isolated Modal -->
+    <div class="fmh-unique-modal-overlay" id="fmh-unique-savings-modal">
+        <div class="fmh-unique-modal-content">
+            <button class="fmh-unique-modal-close" onclick="fmhUniqueCloseModal()">&times;</button>
+            <div class="fmh-unique-modal-header">
+                <h3 class="fmh-unique-modal-title"><i class="fas fa-trophy"></i> Congratulations <span class="fmh-unique-user-name" id="fmh-unique-modal-user-name">there</span>!</h3>
+            </div>
+            <div class="fmh-unique-modal-body">
+                <p>With FMH, <span class="fmh-unique-restaurant-name" id="fmh-unique-modal-restaurant-name">your restaurant</span> can save up to</p>
+                <div class="fmh-unique-savings-amount" id="fmh-unique-modal-savings-amount">$0</div>
+                <p>per month!</p>
+            </div>
+            <div class="fmh-unique-modal-buttons">
+                <button class="fmh-unique-close-modal" onclick="fmhUniqueCloseModal()">
+                    <i class="fas fa-eye"></i> View Detailed Results
+                </button>
+                <a class="fmh-unique-contact-btn" id="fmh-unique-whatsapp-link" href="#" target="_blank">
+                    <i class="fas fa-phone"></i> Contact Us Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fmhUniqueTruncateText(text, maxLength = 7) {
+            if (text.length <= maxLength) {
+                return text;
+            }
+            return text.substring(0, maxLength) + '...';
+        }
+
+        function fmhUniqueFormatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function fmhUniqueFormatPercent(percent) {
+            return percent.toFixed(1) + '%';
+        }
+
+        function fmhUniqueValidateInputs() {
+            let isValid = true;
+            
+            // Reset all error states
+            const inputs = document.querySelectorAll('.fmh-unique-form-group input');
+            inputs.forEach(input => {
+                input.classList.remove('fmh-unique-error');
+            });
+            
+            const errorMessages = document.querySelectorAll('.fmh-unique-error-message');
+            errorMessages.forEach(msg => {
+                msg.classList.remove('show');
+            });
+            
+            // Validate Restaurant Name
+            const restaurantName = document.getElementById('fmh-unique-restaurant-name');
+            if (!restaurantName.value.trim()) {
+                restaurantName.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-restaurant-name-error').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate Your Name
+            const yourName = document.getElementById('fmh-unique-your-name');
+            if (!yourName.value.trim()) {
+                yourName.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-your-name-error').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate Monthly Sales
+            const monthlySales = document.getElementById('fmh-unique-monthly-sales');
+            const salesValue = parseFloat(monthlySales.value);
+            if (isNaN(salesValue) || salesValue <= 0) {
+                monthlySales.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-monthly-sales-error').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate COGS
+            const cogs = document.getElementById('fmh-unique-cogs');
+            const cogsValue = parseFloat(cogs.value);
+            if (isNaN(cogsValue) || cogsValue < 0 || cogsValue > 100) {
+                cogs.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-cogs-error').classList.add('show');
+                isValid = false;
+            }
+            
+            // Validate Wastage
+            const wastage = document.getElementById('fmh-unique-wastage');
+            const wastageValue = parseFloat(wastage.value);
+            if (isNaN(wastageValue) || wastageValue < 0 || wastageValue > 100) {
+                wastage.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-wastage-error').classList.add('show');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        function fmhUniqueCalculateROI() {
+            // Validate inputs first
+            if (!fmhUniqueValidateInputs()) {
+                return;
+            }
+            
+            // Get input values
+            const restaurantName = document.getElementById('fmh-unique-restaurant-name').value || 'Your Restaurant';
+            const userName = document.getElementById('fmh-unique-your-name').value || 'there';
+            const outlets = parseFloat(document.getElementById('fmh-unique-outlets').value) || 0;
+            const monthlySales = parseFloat(document.getElementById('fmh-unique-monthly-sales').value) || 0;
+            const cogsPercent = parseFloat(document.getElementById('fmh-unique-cogs').value) || 40;
+            const wastagePercent = parseFloat(document.getElementById('fmh-unique-wastage').value) || 17;
+            
+            // Fixed FMH values
+            const fmhWastageReduction = 0.24; // 24%
+            const fmhCogsReduction = 0.10; // 10%
+            
+            // Calculations
+            const cogsPerOutlet = monthlySales * (cogsPercent / 100);
+            const foodWastagePerOutlet = cogsPerOutlet * (wastagePercent / 100);
+            const fmhWastagePerOutlet = foodWastagePerOutlet * (1 - fmhWastageReduction);
+            const savingsByWastage = foodWastagePerOutlet - fmhWastagePerOutlet;
+            const fmhCogsPerOutlet = cogsPerOutlet * (1 - fmhCogsReduction);
+            const savingsByCogs = cogsPerOutlet - fmhCogsPerOutlet;
+            const totalSavingsPerOutlet = savingsByWastage + savingsByCogs;
+            const monthlyTotalSavings = totalSavingsPerOutlet * outlets;
+            const percentRevenueBack = (monthlyTotalSavings / monthlySales) * 100;
+            
+            // Format the savings amount for WhatsApp
+            const formattedSavings = fmhUniqueFormatCurrency(monthlyTotalSavings);
+            
+            // Truncate long names for modal display (reduced to 7 characters)
+            const truncatedRestaurantName = fmhUniqueTruncateText(restaurantName, 7);
+            const truncatedUserName = fmhUniqueTruncateText(userName, 7);
+            
+            // Update modal content
+            document.getElementById('fmh-unique-modal-user-name').textContent = truncatedUserName;
+            document.getElementById('fmh-unique-modal-restaurant-name').textContent = truncatedRestaurantName;
+            document.getElementById('fmh-unique-modal-savings-amount').textContent = formattedSavings;
+            
+            // Update WhatsApp link with dynamic message including savings amount
+            const whatsappMessage = `Hello, I'm ${userName} from ${restaurantName}. I learned that with FMH, my restaurant can save up to ${formattedSavings} per month! I'd like to learn more.`;
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            document.getElementById('fmh-unique-whatsapp-link').href = `https://api.whatsapp.com/send?phone=60146536929&text=${encodedMessage}`;
+            
+            document.getElementById('fmh-unique-savings-modal').style.display = 'flex';
+            
+            // Prepare results for display with simplified structure
+            const results = {
+                withoutFMH: {
+                    totalCOGS: cogsPerOutlet * outlets,
+                    totalWastage: foodWastagePerOutlet * outlets
+                },
+                withFMH: {
+                    totalCOGS: fmhCogsPerOutlet * outlets,
+                    totalWastage: fmhWastagePerOutlet * outlets
+                },
+                totalSaving: monthlyTotalSavings,
+                revenuePercentage: percentRevenueBack
+            };
+            
+            // Store results for later use
+            window.fmhUniqueCalculatedResults = results;
+            window.fmhUniqueRestaurantName = restaurantName;
+            window.fmhUniqueUserName = userName;
+            window.fmhUniqueMonthlySavings = formattedSavings;
+        }
+        
+        function fmhUniqueCloseModal() {
+            document.getElementById('fmh-unique-savings-modal').style.display = 'none';
+            fmhUniqueDisplayResults();
+            fmhUniqueShowPostCalculationLayout();
+            fmhUniqueShowBottomSections();
+            // Remove instructions section
+            document.getElementById('fmh-unique-instructions-section').style.display = 'none';
+        }
+        
+        function fmhUniqueDisplayResults() {
+            const resultsContainer = document.getElementById('fmh-unique-results-container');
+            const resultsSection = document.getElementById('fmh-unique-results-section');
+            
+            resultsContainer.innerHTML = '';
+            
+            // Create the simplified savings comparison display (stacked vertically)
+            const results = window.fmhUniqueCalculatedResults;
+            
+            const comparisonHTML = `
+                <div class="fmh-unique-savings-comparison">
+                    <div class="fmh-unique-comparison-section">
+                        <h3 class="fmh-unique-comparison-title">Without FMH</h3>
+                        <div class="fmh-unique-comparison-item">
+                            <span class="fmh-unique-comparison-label">Total COGS per month</span>
+                            <span class="fmh-unique-comparison-value">${fmhUniqueFormatCurrency(results.withoutFMH.totalCOGS)}</span>
+                        </div>
+                        <div class="fmh-unique-comparison-item">
+                            <span class="fmh-unique-comparison-label">Total Cost on Food Wastage</span>
+                            <span class="fmh-unique-comparison-value">${fmhUniqueFormatCurrency(results.withoutFMH.totalWastage)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="fmh-unique-comparison-section">
+                        <h3 class="fmh-unique-comparison-title">With FMH</h3>
+                        <div class="fmh-unique-comparison-item">
+                            <span class="fmh-unique-comparison-label">Total COGS per month</span>
+                            <span class="fmh-unique-comparison-value">${fmhUniqueFormatCurrency(results.withFMH.totalCOGS)}</span>
+                        </div>
+                        <div class="fmh-unique-comparison-item">
+                            <span class="fmh-unique-comparison-label">Total Cost on Food Wastage</span>
+                            <span class="fmh-unique-comparison-value">${fmhUniqueFormatCurrency(results.withFMH.totalWastage)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="fmh-unique-total-saving">
+                    <div class="fmh-unique-total-saving-label">Total Saving</div>
+                    <div class="fmh-unique-total-saving-value">${fmhUniqueFormatCurrency(results.totalSaving)}</div>
+                    <div class="fmh-unique-revenue-label">% of revenue back to your bottom-line</div>
+                    <div class="fmh-unique-revenue-value">${fmhUniqueFormatPercent(results.revenuePercentage)}</div>
+                </div>
+            `;
+            
+            resultsContainer.innerHTML = comparisonHTML;
+            resultsSection.style.display = 'block';
+        }
+        
+        function fmhUniqueShowPostCalculationLayout() {
+            document.getElementById('fmh-unique-post-calculation-layout').style.display = 'flex';
+            
+            // Scroll to results
+            document.getElementById('fmh-unique-results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function fmhUniqueShowBottomSections() {
+            document.getElementById('fmh-unique-bottom-sections').style.display = 'flex';
+        }
+        
+        // Add input validation on blur
+        document.getElementById('fmh-unique-restaurant-name').addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-restaurant-name-error').classList.add('show');
+            } else {
+                this.classList.remove('fmh-unique-error');
+                document.getElementById('fmh-unique-restaurant-name-error').classList.remove('show');
+            }
+        });
+        
+        document.getElementById('fmh-unique-your-name').addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-your-name-error').classList.add('show');
+            } else {
+                this.classList.remove('fmh-unique-error');
+                document.getElementById('fmh-unique-your-name-error').classList.remove('show');
+            }
+        });
+        
+        document.getElementById('fmh-unique-monthly-sales').addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (isNaN(value) || value <= 0) {
+                this.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-monthly-sales-error').classList.add('show');
+            } else {
+                this.classList.remove('fmh-unique-error');
+                document.getElementById('fmh-unique-monthly-sales-error').classList.remove('show');
+            }
+        });
+        
+        document.getElementById('fmh-unique-cogs').addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (isNaN(value) || value < 0 || value > 100) {
+                this.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-cogs-error').classList.add('show');
+            } else {
+                this.classList.remove('fmh-unique-error');
+                document.getElementById('fmh-unique-cogs-error').classList.remove('show');
+            }
+        });
+        
+        document.getElementById('fmh-unique-wastage').addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (isNaN(value) || value < 0 || value > 100) {
+                this.classList.add('fmh-unique-error');
+                document.getElementById('fmh-unique-wastage-error').classList.add('show');
+            } else {
+                this.classList.remove('fmh-unique-error');
+                document.getElementById('fmh-unique-wastage-error').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
